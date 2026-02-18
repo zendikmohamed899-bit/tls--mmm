@@ -1,5 +1,5 @@
 const express = require('express');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 
 const app = express();
 app.use(express.json());
@@ -17,11 +17,11 @@ app.post('/api/monitoring/start', async (req, res) => {
 
     monitoring = true;
 
-    browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-
+   browser = await puppeteer.launch({
+    executablePath: '/usr/bin/chromium',
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+});
     page = await browser.newPage();
 
     setInterval(async () => {
@@ -56,3 +56,4 @@ app.post('/api/monitoring/stop', async (req, res) => {
 app.listen(process.env.PORT || 10000, () => {
     console.log("Server running");
 });
+
